@@ -1,7 +1,6 @@
-Attribute VB_Name = "MÛdulo1"
 Private Sub Auto_Open()
  
-    MsgBox "CLIQUE EM 'ATUALIZAR TUDO' ANTES DE ENVIAR OS EMAILS !", vbExclamation, "IMPORTANTE"
+    MsgBox "ATUALIZE a planilha antes de enviar os emails!", vbExclamation, "IMPORTANTE"
     
 End Sub
 
@@ -14,7 +13,7 @@ Private Sub Lista_Faltas()
     
     i = 1
     j = 1
-    w = 2  'comeÁa pela linha 2 da planilha
+    w = 2  'come√ßa pela linha 2 da planilha
     h = 2
     m = 2
     Z = 0
@@ -26,40 +25,40 @@ Private Sub Lista_Faltas()
     
     Classifica_Planilha
     
-    '============== mensagem de confirmaÁ„o de envio de mensagens de cobranÁa ===============
+    '============== mensagem de confirma√ß√£o de envio de mensagens de cobran√ßa ===============
     
-    h = MsgBox("Tabela atualizada ?" & Chr(10) & Chr(13) & Chr(13) & "Enviar As mensagens?", vbYesNoCancel, "Envio de mensagem de cobranÁa") ' (yes = 6) (no = 7) (cancelar = 2)
-    'm = MsgBox("Enviar mensagem alternativa de FINAL DE PERÕODO ?" & Chr(10) & Chr(13) & Chr(13), vbYesNoCancel, "Final de MÍs/Semestre") ' (yes = 6) (no = 7) (cancelar = 2)
+    h = MsgBox("Tabela atualizada ?" & Chr(10) & Chr(13) & Chr(13) & "Enviar As mensagens?", vbYesNoCancel, "Envio de mensagem de cobran√ßa") ' (yes = 6) (no = 7) (cancelar = 2)
+    'm = MsgBox("Enviar mensagem alternativa de FINAL DE PER√çODO ?" & Chr(10) & Chr(13) & Chr(13), vbYesNoCancel, "Final de M√™s/Semestre") ' (yes = 6) (no = 7) (cancelar = 2)
     m = 7 'garante a mensagem 1 no envio do email
     
-    '============== mÛdulo principal ===============
+    '============== m√≥dulo principal ===============
     
     If h = 6 Then
         
-        func = Range("e2") 'vari·vel recebe matricula
+        func = Range("e2") 'vari√°vel recebe matricula
         
-        verifunc = func 'atribui matricula a vari·vel de verificaÁ„o
+        verifunc = func 'atribui matricula a vari√°vel de verifica√ß√£o
         
-        profi = Range("d2") 'vari·vel recebe nome
+        profi = Range("d2") 'vari√°vel recebe nome
         
-        Do Until func = 0 'percorre atÈ o final
+        Do Until func = 0 'percorre at√© o final
             
-            Do Until verifunc <> func 'repete enquanto a matricula e vari·vel de verificaÁ„o s„o iguais (atÈ encontrar matricula(func) diferente)
+            Do Until verifunc <> func 'repete enquanto a matricula e vari√°vel de verifica√ß√£o s√£o iguais (at√© encontrar matricula(func) diferente)
                 
-                pront = Range("a" & w) 'seleciona o prontu·rio
+                pront = Range("a" & w) 'seleciona o prontu√°rio
                 
                 dsem = Range("b" & w) 'seleciona o dia
                 
-                dsems = Range("c" & w) 'seleciona clÌnica
+                dsems = Range("c" & w) 'seleciona cl√≠nica
                 
                 dias(j) = pront & " - " & dsems & " " & dsem 'monta o vetor com os dados coletados
                 
                 w = w + 1
                 j = j + 1
                 
-                verifunc = Range("e" & w) 'vari·vel recebe a matricula da linha de baixo
+                verifunc = Range("e" & w) 'vari√°vel recebe a matricula da linha de baixo
                 
-            Loop 'sai do loop quando a matricula (func) È diferente
+            Loop 'sai do loop quando a matricula (func) √© diferente
             
                 j = j - 1
                 
@@ -79,14 +78,14 @@ Private Sub Lista_Faltas()
         '=================== seleciona qual mensagem enviar ===================
         
             If m = 7 Then
-                    GoSub mensagem01 'mensagem de mÍs normal
+                    GoSub mensagem01 'mensagem de m√™s normal
             End If
             
             If m = 6 Then
-                    GoSub mensagem02 'mensagem de final de mÍs ou semestre
+                    GoSub mensagem02 'mensagem de final de m√™s ou semestre
             End If
             
-        '=================== repete o processo e reseta os contadores para serem reutilizados na prÛxima matrÌcula ===================
+        '=================== repete o processo e reseta os contadores para serem reutilizados na pr√≥xima matr√≠cula ===================
             
             contaEmail = contaEmail + 1
             func = Range("e" & w)
@@ -106,9 +105,16 @@ Application.ScreenUpdating = True
 
 Exit Sub
 
-'=================== mensagem normal do mÍs ===================
+'=================== mensagem normal do m√™s ===================
 mensagem01:
-
+    
+    ' VERIFICA√á√ÉO DE DESTINAT√ÅRIOS EXCLU√çDOS
+'    Select Case func
+'        Case "20220835"
+'            MsgBox "Matr√≠cula " & func & " ignorada.", vbInformation, "Aviso"
+'            Return ' Pula o envio de mensagem para essa matr√≠cula e volta para as outras
+'    End Select
+    
     'Application.ScreenUpdating = False
     Application.DisplayAlerts = False
     
@@ -125,25 +131,23 @@ mensagem01:
         
         .To = func & "@sarah.br"     'concatena matricula com o @ do email
         
-        .sentonbehalfofname = "RegistrodeEstatisticas-CNCQ@sarah.br"     'seta o nome do destinat·rio
+        .sentonbehalfofname = "RegistrodeEstatisticas-CNCQ@sarah.br"     'seta o nome do destinat√°rio
         
-        .Subject = "Pacientes atendidos sem registro de estatÌstica"
+        .Subject = "Pacientes atendidos sem registro de estat√≠stica"
         
         '.Importance = 2 ' 2 = Alta prioridade
         
-        'cada linha da mensagem atribuida a uma vari·vel
         line1 = IIf(Hour(Now()) < 12, "Bom dia!", "Boa tarde!")
-        line2 = "Estamos fazendo a conferÍncia da digitaÁ„o de estatÌstica e verificamos que "
-        line3 = IIf(j = 1, "h· 1 paciente atendido na sua agenda, mas sem registro de estatÌstica.", "h· " & j & " pacientes atendidos na sua agenda, mas sem registro de estatÌstica.")
-        'line4 = "sem registro de estatÌstica."
-        line5 = "Quando a estatÌstica atrasada ultrapassar o limite de dias do sistema (10 dias), favor nos enviar o LOCAL e as ATIVIDADES realizadas."
-        line6 = "Nos casos onde N√O tenha ocorrido o atendimento ao paciente, solicitar o CANCELAMENTO DA RECEP«√O no setor de Atendimento ao P˙blico."
+        line2 = "Estamos fazendo a confer√™ncia da digita√ß√£o de estat√≠stica e verificamos que "
+        line3 = IIf(j = 1, "h√° 1 paciente atendido na sua agenda, mas sem registro de estat√≠stica.", "h√° " & j & " pacientes atendidos na sua agenda, mas sem registro de estat√≠stica.")
+        line5 = "Quando a estat√≠stica atrasada ultrapassar o limite de dias do sistema (10 dias), favor nos enviar o LOCAL e as ATIVIDADES realizadas."
+        line6 = "Nos casos onde N√ÉO tenha ocorrido o atendimento ao paciente, solicitar o CANCELAMENTO DA RECEP√á√ÉO no setor de Atendimento ao P√∫blico."
         line7 = diasinter
         line8 = "Obrigado,"
         line9 = "Controle de Qualidade"
         line10 = "Ramal 1679"
         
-        'CORPO DO EMAIL EM HTML (M S NORMAL)
+        'CORPO DO EMAIL EM HTML (M√äS NORMAL)
                 .HTMLBody = _
                     "<html>" & vbNewLine & _
                             "<body style=font-size:11pt;font-family:Calibri> " & vbNewLine & _
@@ -160,7 +164,7 @@ mensagem01:
         
         .Send
         
-        'reseta a sess„o de email
+        'reseta a sess√£o de email
         Set OutApp = Nothing
         Set OutMail = Nothing
         
@@ -172,8 +176,15 @@ mensagem01:
 
 Return
 
-'=================== mensagem de final de mÍs ===================
+'=================== mensagem de final de m√™s ===================
 mensagem02:
+
+    ' VERIFICA√á√ÉO DE DESTINAT√ÅRIOS EXCLU√çDOS
+'    Select Case func
+'        Case "17000853"
+'            ' MsgBox "Matr√≠cula " & func & " ignorada.", vbInformation, "Aviso" 'aviso de n√£o envio
+'            Return ' Pula este envio e volta para o loop principal
+'    End Select
 
     'Application.ScreenUpdating = False
     Application.DisplayAlerts = False
@@ -191,28 +202,24 @@ mensagem02:
         
         .To = func & "@sarah.br"     'concatena matricula com o @ do email
         
-        .sentonbehalfofname = "RegistrodeEstatisticas-CNCQ@sarah.br"     'seta o nome do destinat·rio
+        .sentonbehalfofname = "RegistrodeEstatisticas-CNCQ@sarah.br"     'seta o nome do destinat√°rio
         
-        .Subject = "Pacientes de OUTUBRO sem registro de estatÌstica"    ' <= LEMBRAR DE TROCAR O M S
+        .Subject = "Estat√≠stica final de m√™s"
         
         .Importance = 2 ' 2 = Alta prioridade
         
-        'cada linha da mensagem atribuida a uma vari·vel
         line1 = IIf(Hour(Now()) < 12, "Bom dia!", "Boa tarde!")
-        line2 = "Estamos fechando a conferÍncia da estatÌstica do M S DE OUTUBRO. Para concluir o relatÛrio, verificamos que " ' <= LEMBRAR DE TROCAR O M S
-        line3 = IIf(j = 1, "h· 1 paciente atendido na sua agenda, mas sem registro de estatÌstica.", "h· " & j & " pacientes atendidos na sua agenda, mas sem registro de estatÌstica.")
-        'line4 = "sem registro de estatÌstica."
-        line5 = "Quando a estatÌstica atrasada ultrapassar o limite de dias do sistema (10 dias), favor nos enviar o LOCAL e as ATIVIDADES realizadas."
-        'line5 = "<b>Estamos fechando o relatÛrio " & ObterMes & ". Por favor, digite suas estatÌsticas ainda pendentes, se possÌvel, atÈ o dia 12/0" & Month(Date) & "/" & Year(Date) & ".</b>"
-        'line5 = "<b>Estamos fechando o RelatÛrio Semestral, por favor verifique suas estatÌsticas ainda pendentes. ApÛs o dia 03/07 (amanh„) n„o ser· mais possÌvel realizar o registro retroativo de estatÌstica.</b>"
-        line6 = "Nos casos onde N√O tenha ocorrido o atendimento ao paciente, solicitar o CANCELAMENTO DA RECEP«√O no setor de Atendimento ao P˙blico."
-        line7 = "<b><span style='color: red;'>=> Favor registrar a estatÌstica atrasada atÈ amanh„, dia 05/11.</span></b>" ' <= LEMBRAR DE TROCAR A DATA
+        line2 = "Estamos conferindo a digita√ß√£o de estat√≠stica do M√äS DE " & ObterMes & " e verificamos que " '<< TROCA DE M√äS AUTOM√ÅTICA
+        line3 = IIf(j = 1, "h√° 1 paciente atendido na sua agenda, mas sem registro de estat√≠stica.", "h√° " & j & " pacientes atendidos na sua agenda, mas sem registro de estat√≠stica.")
+        line5 = "Quando a estat√≠stica atrasada ultrapassar o limite de dias do sistema (10 dias), favor nos enviar o LOCAL e as ATIVIDADES realizadas."
+        line6 = "Nos casos onde N√ÉO tenha ocorrido o atendimento ao paciente, solicitar o CANCELAMENTO DA RECEP√á√ÉO no setor de Atendimento ao P√∫blico."
+        line7 = "<b><span style='color: red;'>=> Pedimos, por gentileza, digitar suas estat√≠sticas ainda pendentes at√© amanh√£, dia 04/11/2026. <=</span></b>" ' '<< TROCAR DATA LIMITE
         line8 = diasinter
         line9 = "Obrigado,"
         line10 = "Controle de Qualidade"
         line11 = "Ramal 1679"
         
-        'CORPO DO EMAIL EM HTML COM A MENSAGEM DE FINAL DE M S OU SEMESTRAL (line5)
+        'CORPO DO EMAIL EM HTML COM A MENSAGEM DE FINAL DE M√äS OU SEMESTRAL (line5)
                 .HTMLBody = _
                     "<html>" & vbNewLine & _
                             "<body style=font-size:11pt;font-family:Calibri> " & vbNewLine & _
@@ -230,7 +237,7 @@ mensagem02:
                 
         .Send
         
-        'reseta a sess„o de email
+        'reseta a sess√£o de email
         Set OutApp = Nothing
         Set OutMail = Nothing
         
@@ -244,21 +251,21 @@ Return
 
 End Sub
 
-'================ Classifica os dados da Planilha "ConferÍncia" =======================
+'================ Classifica os dados da Planilha "Confer√™ncia" =======================
 
 Private Sub Classifica_Planilha()
 
-    Sheets("ConferÍncia").Select
-    ActiveWorkbook.Worksheets("ConferÍncia").ListObjects("Tabela_Consulta_de_BSB").Sort.SortFields.Clear
-    ActiveWorkbook.Worksheets("ConferÍncia").ListObjects("Tabela_Consulta_de_BSB").Sort.SortFields.Add Key:=Range("Tabela_Consulta_de_BSB[NR_MATRICULA]"), _
+    Sheets("Confer√™ncia").Select
+    ActiveWorkbook.Worksheets("Confer√™ncia").ListObjects("Tabela_Consulta_de_BSB").Sort.SortFields.Clear
+    ActiveWorkbook.Worksheets("Confer√™ncia").ListObjects("Tabela_Consulta_de_BSB").Sort.SortFields.Add Key:=Range("Tabela_Consulta_de_BSB[NR_MATRICULA]"), _
     SortOn:=xlSortOnValues, Order:=xlAscending, DataOption:=xlSortNormal
-    ActiveWorkbook.Worksheets("ConferÍncia").ListObjects("Tabela_Consulta_de_BSB").Sort.SortFields.Add Key:=Range("Tabela_Consulta_de_BSB[DATA]"), _
+    ActiveWorkbook.Worksheets("Confer√™ncia").ListObjects("Tabela_Consulta_de_BSB").Sort.SortFields.Add Key:=Range("Tabela_Consulta_de_BSB[DATA]"), _
     SortOn:=xlSortOnValues, Order:=xlAscending, DataOption:=xlSortNormal
-    ActiveWorkbook.Worksheets("ConferÍncia").ListObjects("Tabela_Consulta_de_BSB").Sort.SortFields.Add Key:=Range("Tabela_Consulta_de_BSB[CLÕNICAS]"), _
+    ActiveWorkbook.Worksheets("Confer√™ncia").ListObjects("Tabela_Consulta_de_BSB").Sort.SortFields.Add Key:=Range("Tabela_Consulta_de_BSB[CL√çNICAS]"), _
     SortOn:=xlSortOnValues, Order:=xlAscending, DataOption:=xlSortNormal
-    ActiveWorkbook.Worksheets("ConferÍncia").ListObjects("Tabela_Consulta_de_BSB").Sort.SortFields.Add Key:=Range("Tabela_Consulta_de_BSB[NR_REGISTRO]"), _
+    ActiveWorkbook.Worksheets("Confer√™ncia").ListObjects("Tabela_Consulta_de_BSB").Sort.SortFields.Add Key:=Range("Tabela_Consulta_de_BSB[NR_REGISTRO]"), _
     SortOn:=xlSortOnValues, Order:=xlAscending, DataOption:=xlSortNormal
-    With ActiveWorkbook.Worksheets("ConferÍncia").ListObjects("Tabela_Consulta_de_BSB").Sort
+    With ActiveWorkbook.Worksheets("Confer√™ncia").ListObjects("Tabela_Consulta_de_BSB").Sort
         .Header = xlYes
         .MatchCase = False
         .Orientation = xlTopToBottom
@@ -267,31 +274,31 @@ Private Sub Classifica_Planilha()
     End With
 End Sub
 
-'================ complemento para mensagem de final de mÍs, se necess·rio =====================
+'================ complemento para mensagem de final de m√™s =====================
 
-'Private Function ObterMes() As String
-'
-'    Dim MesAtual As Integer
-'    Dim NomeMes As String
-'    MesAtual = Month(Date)
-'
-'    Select Case MesAtual
-'        Case 1: NomeMes = "Anual"
-'        Case 2: NomeMes = "de Janeiro"
-'        Case 3: NomeMes = "de Fevereiro"
-'        Case 4: NomeMes = "de MarÁo"
-'        Case 5: NomeMes = "de Abril"
-'        Case 6: NomeMes = "de Maio"
-'        Case 7: NomeMes = "de Junho"
-'        Case 8: NomeMes = "de Julho"
-'        Case 9: NomeMes = "de Agosto"
-'        Case 10: NomeMes = "de Setembro"
-'        Case 11: NomeMes = "de Outubro"
-'        Case 12: NomeMes = "de Novembro"
-'
-'    End Select
-'
-'    ObterMes = NomeMes
-'
-'End Function
+Private Function ObterMes() As String
+
+    Dim MesAtual As Integer
+    Dim NomeMes As String
+    MesAtual = Month(Date)
+
+    Select Case MesAtual
+        Case 1: NomeMes = "DEZEMBRO"
+        Case 2: NomeMes = "JANEIRO"
+        Case 3: NomeMes = "FEVEREIRO"
+        Case 4: NomeMes = "MAR√áO"
+        Case 5: NomeMes = "ABRIL"
+        Case 6: NomeMes = "MAIO"
+        Case 7: NomeMes = "JUNHO"
+        Case 8: NomeMes = "JULHO"
+        Case 9: NomeMes = "AGOSTO"
+        Case 10: NomeMes = "SETEMBRO"
+        Case 11: NomeMes = "OUTUBRO"
+        Case 12: NomeMes = "NOVEMBRO"
+
+    End Select
+
+    ObterMes = NomeMes
+
+End Function
 
